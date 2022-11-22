@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, get_object_or_404
 from django.views import View
 from django.http import HttpResponse
 
@@ -14,5 +14,10 @@ class IndexView(View):
         })
 
 
-def article(request, tags, article_id):
-    return HttpResponse(f'Статья номер {article_id}. Тег {tags}.')
+class ArticleView(View):
+
+    def get(self, request, *args, **kwargs):
+        article = get_object_or_404(Article, name=kwargs['name'])
+        return render(request, 'article/show.html', context={
+            'article': article
+        })
